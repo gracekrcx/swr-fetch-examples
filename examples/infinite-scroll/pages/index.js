@@ -6,6 +6,7 @@ import useOnScreen from "../hooks/useOnScreen";
 const PAGE_SIZE = 8;
 
 const getKey = (pageIndex, previousPageData, repo, pageSize) => {
+  console.log({ pageIndex, previousPageData, repo, pageSize });
   if (previousPageData && !previousPageData.length) return null;
   return `https://api.github.com/repos/${repo}/issues?per_page=${pageSize}&page=${
     pageIndex + 1
@@ -23,7 +24,11 @@ export default function App() {
   const isVisible = useOnScreen(ref);
 
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
-    (...args) => getKey(...args, repo, PAGE_SIZE),
+    (...args) => {
+      // console.log("---> args:::", args);
+      // args = [0, null]
+      return getKey(...args, repo, PAGE_SIZE);
+    },
     fetcher
   );
 
